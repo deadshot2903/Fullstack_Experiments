@@ -2,19 +2,20 @@
   publish = "."
   
 [[redirects]]
-  from = "/Exp1_1"
-  to = "/Exp1_1/Exp1_1.html"
+  from = "/1_1"
+  to = "/1_1/Exp1_1.html"
   status = 200
 
 [[redirects]]
-  from = "/Exp1_2"
-  to = "/Exp1_2/Exp1_2.html"
+  from = "/1_2"
+  to = "/1_2/Exp1_2.html"
   status = 200
 
 [[redirects]]
-  from = "/Exp1_3"
-  to = "/Exp1_3/Exp1_3.html"
+  from = "/1_3"
+  to = "/1_3/Exp1_3.html"
   status = 200
+
 
 
 
