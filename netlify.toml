@@ -1,11 +1,6 @@
 [build]
   publish = "."
-
-[[redirects]]
-  from = "/"
-  to = "/Exp1_1/Exp1_1.html"
-  status = 200
-
+  
 [[redirects]]
   from = "/Exp1_1"
   to = "/Exp1_1/Exp1_1.html"
@@ -20,5 +15,6 @@
   from = "/Exp1_3"
   to = "/Exp1_3/Exp1_3.html"
   status = 200
+
 
 
