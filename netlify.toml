@@ -1,0 +1,22 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/exp1_1/1_1.html"
+  status = 200
+
+[[redirects]]
+  from = "/exp1_1"
+  to = "/exp1_1/1_1.html"
+  status = 200
+
+[[redirects]]
+  from = "/exp1_2"
+  to = "/exp1_2/1_2.html"
+  status = 200
+
+[[redirects]]
+  from = "/exp1_3"
+  to = "/exp1_3/1_3.html"
+  status = 200
