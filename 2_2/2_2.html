@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Filter</title>
+  <style>
+    :root{
+      --bg: #f7f9fc;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #d8e1ee;
+      --card: #ffffff;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1000px 500px at 50% -150px, #eef4ff 0%, var(--bg) 60%, #ffffff 100%);
+      color: var(--text);
+    }
+
+    .wrap{
+      max-width: 920px;
+      padding: 56px 20px 70px;
+      margin: 0 auto;
+    }
+
+    h1{
+      font-size: clamp(44px, 5vw, 64px);
+      letter-spacing: -0.02em;
+      margin: 0 0 28px;
+      font-weight: 800;
+    }
+
+    .controls{
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .controls label{
+      font-size: 22px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .select-wrap{
+      position: relative;
+      flex: 1 1 520px;
+      min-width: 260px;
+      max-width: 640px;
+    }
+
+    select{
+      width: 100%;
+      font-size: 26px;
+      padding: 16px 52px 16px 18px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      outline: none;
+      box-shadow: 0 2px 0 rgba(15,23,42,0.03);
+      appearance: none;
+    }
+    select:focus{
+      border-color: #9bb8ff;
+      box-shadow: 0 0 0 5px rgba(59,130,246,0.12);
+    }
+
+    /* custom dropdown arrow */
+    .select-wrap::after{
+      content: "▾";
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 22px;
+      color: #334155;
+      pointer-events: none;
+    }
+
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      padding-top: 8px;
+    }
+
+    @media (max-width: 720px){
+      .grid{ grid-template-columns: 1fr; }
+      .controls label{ font-size: 20px; }
+      select{ font-size: 22px; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 26px 26px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+      min-height: 210px;
+
+      /* animation hooks */
+      opacity: 1;
+      transform: translateY(0);
+      transition: transform 220ms ease, opacity 220ms ease;
+      will-change: transform, opacity;
+    }
+
+    .card.hiding{
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .title{
+      font-size: 42px;
+      line-height: 1.05;
+      margin: 0 0 12px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .price{
+      font-size: 34px;
+      margin: 0 0 18px;
+      font-weight: 700;
+      color: #2f6df6;
+    }
+
+    .tag{
+      display: inline-block;
+      font-size: 26px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      user-select: none;
+    }
+
+    .tag.electronics{
+      background: #2f6df6;
+      color: #eaf1ff;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.12);
+    }
+
+    .tag.clothing{
+      background: #2f6df6;   /* dark blue */
+      color: #eaf1ff;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.15);
+
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Product Filter</h1>
+
+    <div class="controls">
+      <label for="filter">Filter by:</label>
+
+      <div class="select-wrap">
+        <select id="filter" aria-label="Filter products">
+          <option value="all">All Products</option>
+          <option value="electronics">electronics</option>
+          <option value="clothing">clothing</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="grid" class="grid" aria-live="polite"></div>
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: "Wireless\nHeadphones", price: 129.99, category: "electronics" },
+      { id: 2, name: "Cotton\nT-Shirt",        price: 24.99,  category: "clothing" },
+      { id: 3, name: "Bluetooth\nSpeaker",     price: 89.99,  category: "electronics" },
+      { id: 4, name: "Denim\nJeans",           price: 59.99,  category: "clothing" },
+    ];
+
+    const grid = document.getElementById("grid");
+    const select = document.getElementById("filter");
+
+    function cardHTML(p){
+      const safeTitle = p.name.replaceAll("\n","<br>");
+      return `
+        <div class="card" data-category="${p.category}">
+          <h2 class="title">${safeTitle}</h2>
+          <p class="price">$${p.price.toFixed(2)}</p>
+          <span class="tag ${p.category}">${p.category}</span>
+        </div>
+      `;
+    }
+
+    function render(list){
+      grid.innerHTML = list.map(cardHTML).join("");
+    }
+
+    function filterAndAnimate(){
+      const value = select.value;
+
+      // Add hide animation to current cards
+      const currentCards = Array.from(grid.querySelectorAll(".card"));
+      currentCards.forEach(c => c.classList.add("hiding"));
+
+      // After the fade, re-render filtered list and fade-in
+      setTimeout(() => {
+        const filtered = value === "all"
+          ? products
+          : products.filter(p => p.category === value);
+
+        render(filtered);
+
+        // start hidden then reveal (nice pop-in)
+        const newCards = Array.from(grid.querySelectorAll(".card"));
+        newCards.forEach(c => c.classList.add("hiding"));
+        requestAnimationFrame(() => {
+          newCards.forEach(c => c.classList.remove("hiding"));
+        });
+      }, 180);
+    }
+
+    // Initial render
+    render(products);
+
+    // Smooth entrance on load
+    requestAnimationFrame(() => {
+      document.querySelectorAll(".card").forEach(c => c.classList.remove("hiding"));
+    });
+
+    // Hook filter
+    select.addEventListener("change", filterAndAnimate);
+  </script>
+</body>
+</html>
